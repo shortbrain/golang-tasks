@@ -27,8 +27,8 @@ jobs:
       run: |        
         kubectl apply -f https://raw.githubusercontent.com/tektoncd/catalog/main/task/git-clone/0.7/git-clone.yaml
         # go-crane-image
-        kubectl create -f ./tasks/go-crane-image/go-crane-image.yaml
-        kubectl create -f ./tasks/go-crane-image/tests/run.yaml
+        kubectl create -f ./go-crane-image/go-crane-image.yaml
+        kubectl create -f ./go-crane-image/tests/run.yaml
 
         tkn pipelinerun logs -f go-crane-image-test-run
         tkn pipelinerun describe go-crane-image-test-run
@@ -41,8 +41,8 @@ jobs:
         #fi
 
         # go-ko-image
-        kubectl create -f ./tasks/go-ko-image/go-ko-image.yaml
-        kubectl create -f ./tasks/go-ko-image/tests/run.yaml
+        kubectl create -f ./go-ko-image/go-ko-image.yaml
+        kubectl create -f ./go-ko-image/tests/run.yaml
 
         tkn pipelinerun logs -f go-ko-image-test-run
         tkn pipelinerun describe go-ko-image-test-run
