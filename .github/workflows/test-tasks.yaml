@@ -21,7 +21,7 @@ jobs:
         k8s-version: v1.23.x
     - uses: vdemeester/setup-tektoncd@main
       with:
-        pipeline: v0.44.x
+        pipeline: v0.41.x
         pipeline-feature-flags: '{"enable-api-fields": "alpha"}'
     - name: run-tests
       run: |        
