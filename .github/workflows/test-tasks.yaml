@@ -1,0 +1,50 @@
+on:
+  pull_request:
+    branches: [ main ]
+  push:
+    branches: [ main ]
+  schedule:
+    - cron: '0 0 * * *'
+
+name: test-tasks
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+    - uses: actions/checkout@v3
+    - uses: chainguard-dev/actions/setup-kind@main
+      with:
+        k8s-version: v1.23.x
+    - uses: vdemeester/setup-tektoncd@main
+      with:
+        pipeline: v0.44.x
+        pipeline-feature-flags: '{"enable-api-fields": "alpha"}'
+    - name: run-tests
+      run: |        
+        kubectl apply -f https://raw.githubusercontent.com/tektoncd/catalog/main/task/git-clone/0.7/git-clone.yaml
+        # go-crane-image
+        kubectl create -f ./tasks/go-crane-image/go-crane-image.yaml
+        kubectl create -f ./tasks/go-crane-image/tests/run.yaml
+
+        tkn pipelinerun logs -f go-crane-image-test-run
+        tkn pipelinerun describe go-crane-image-test-run
+
+        kubectl get pipelinerun go-crane-image-test-run
+        #status=$(kubectl get pipelinerun go-crane-image-test-run -o json | jq -r '.items[] | .status.conditions[] | select(.type == "Succeeded") | .status')
+        #if [[ "${status}" != "True" ]]; then
+        #  echo "go-crane-image test failed"
+        #  kubectl get pipelinerun/go-crane-image-test-run -o yaml
+        #fi
+
+        # go-ko-image
+        kubectl create -f ./tasks/go-ko-image/go-ko-image.yaml
+        kubectl create -f ./tasks/go-ko-image/tests/run.yaml
+
+        tkn pipelinerun logs -f go-ko-image-test-run
+        tkn pipelinerun describe go-ko-image-test-run
+
+        kubectl get pipelinerun go-ko-image-test-run
