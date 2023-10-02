@@ -130,7 +130,7 @@ spec:
     - name: KO_DOCKER_REPO
       value: $(params.image.prefix)
   - name: add-metadata
-    image: ghcr.io/shortain/golang-tasks/crane:main
+    image: ghcr.io/shortbrain/golang-tasks/crane:main
     workingDir: $(workspaces.source.path)
     script: |
       #!/usr/bin/env bash
