@@ -15,7 +15,8 @@ done
 
 git add -u || true
 git commit -sS -m "Prepare release $VERSION" || true
-    
+git push || true
+
 # Create the actual release
 mkdir -p release
 ${CATALOGCD} release --output release  --version="${VERSION}" ${TASKS}
