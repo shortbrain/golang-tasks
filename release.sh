@@ -8,6 +8,9 @@ VERSION=$1
 shift
 CATALOGCD=${CATALOGCD:-catalog-cd}
 
+rm -fR release || true
+mkdir -p release
+
 TASKS="go-crane-image go-ko-image"
 for t in ${TASKS}; do
     yq e -i ".metadata.labels[\"app.kubernetes.io/version\"] = \"${VERSION}\"" ${t}/${t}.yaml
@@ -18,7 +21,6 @@ git commit -sS -m "Prepare release $VERSION" || true
 git push || true
 
 # Create the actual release
-mkdir -p release
 ${CATALOGCD} release --output release  --version="${VERSION}" ${TASKS}
 
 git tag v${VERSION}
