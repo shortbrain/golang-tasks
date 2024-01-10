@@ -1,7 +1,7 @@
 version: 2
 updates:
   - package-ecosystem: "docker"
-    directory: "/images/crane"
+    directory: "/images/"
     schedule:
       interval: "weekly"
       # Disable all pull requests for Docker dependencies
