@@ -10,7 +10,7 @@ spec:
     requests:
       storage: 500Mi
 ---
-apiVersion: tekton.dev/v1beta1
+apiVersion: tekton.dev/v1
 kind: Pipeline
 metadata:
   name: go-crane-image-pipeline
@@ -20,7 +20,14 @@ spec:
   tasks:
     - name: fetch-repository
       taskRef:
-        name: git-clone
+        resolver: git
+        params:
+          - name: url
+            value: https://github.com/tektoncd/catalog
+          - name: revision
+            value: main
+          - name: pathInRepo
+            value: task/git-clone/0.9/git-clone.yaml
       workspaces:
         - name: output
           workspace: shared-workspace
@@ -48,11 +55,11 @@ spec:
       - name: image
         value:
           base: docker.io/library/alpine
-          prefix: registry.local:5000/go-rest-api-test
+          prefix: registry.registry.svc.cluster.local:32222/go-rest-api-test
           labels: foo=bar;bar=baz
           envs: FOO=bar;BAR=baz
 ---
-apiVersion: tekton.dev/v1beta1
+apiVersion: tekton.dev/v1
 kind: PipelineRun
 metadata:
   name: go-crane-image-test-run
