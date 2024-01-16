@@ -1,5 +1,5 @@
 FROM alpine:3.19 AS crane
-ARG VERSION=0.12.0
+ARG VERSION=0.17.0
 # RUN apk add --no-cache go && go install github.com/slsa-framework/slsa-verifier/cli/slsa-verifier@v1.3.1
 RUN ARCH=$(uname -m) OS=$(uname) && \
     wget -O go-containerregistry.tar.gz https://github.com/google/go-containerregistry/releases/download/v${VERSION}/go-containerregistry_${OS}_${ARCH}.tar.gz && \

@@ -1,6 +1,11 @@
 # go-ko-image
 
-Build an oci image using go and ko.
+Build an oci image using go and ko. 
+
+- **Go** 1.20.x.
+- **Ko** 0.15.x.
+- **Crane** 0.17.x.
+- The image(s) are based of Alpine.
 
 ## Workspaces
 
