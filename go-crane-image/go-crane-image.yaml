@@ -9,7 +9,7 @@ metadata:
     tekton.dev/categories: language
     tekton.dev/tags: go
     tekton.dev/displayName: "go crane image"
-    tekton.dev/platforms: "linux/amd64,linux/s390x,linux/ppc64le,linux/arm64"
+    tekton.dev/platforms: "linux/amd64,linux/arm64"
 spec:
   description: >-
     The go-crane-image Task will build a container image based of off a go project to be compiled, using crane.
