@@ -69,7 +69,10 @@ spec:
       workingDir: $(workspaces.source.path)
       script: |
         #!/usr/bin/env bash
-        set -eko
+        set -e
+
+        git config --global --add safe.directory $(workspaces.source.path)
+
         go env
         go build -o $(params.app) $(params.package)
       env:
