@@ -7,7 +7,7 @@ contents:
     - ca-certificates-bundle
     - wolfi-base
     - bash
-    - ko
+    - crane
 
 accounts:
   groups:
@@ -20,7 +20,7 @@ accounts:
   run-as: 65532
 
 entrypoint:
-  command: /bin/go
+  command: /bin/crane
 
 archs:
   - amd64
