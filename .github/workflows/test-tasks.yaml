@@ -126,7 +126,9 @@ jobs:
         - v0.53.3
         - latest
     runs-on: ubuntu-latest
-    needs: build-images
+    needs:
+      - build-images
+      - build-apko-images
     permissions:
       contents: read
       packages: write
