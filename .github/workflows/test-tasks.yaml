@@ -14,6 +14,51 @@ concurrency:
 
 jobs:
 
+  list-apko-images:
+    runs-on: ubuntu-latest
+    outputs:
+      images: ${{ steps.output-images.outputs.images }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: list images
+        id: output-images
+        run: |
+          cd images/apko
+          echo "images=$(ls *.yaml | sed -e 's/\.yaml$//' | jq -R -s -c 'split("\n")[:-1]')" >> $GITHUB_OUTPUT
+
+  build-apko-images:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    needs: list-apko-images
+    strategy:
+      matrix:
+        image: ${{fromJSON(needs.list-apko-images.outputs.images)}}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+      - name: Log in to the Container registry
+        if: github.event_name != 'pull_request'
+        uses: docker/login-action@343f7c4344506bcbf9b4de18042ae17996df046d
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Build apko image ${{ matrix.image }}
+        if: github.event_name == 'pull_request'
+        uses: distroless/actions/apko-build@main
+        with:
+          config: images/apko/${{ matrix.image }}.yaml
+          tag: ghcr.io/${{ github.repository }}/${{ matrix.image }}:latest
+      - name: Build and publish apko image ${{ matrix.image }}
+        if: github.event_name != 'pull_request'
+        uses: distroless/actions/apko-publish@main
+        with:
+          config: images/apko/${{ matrix.image }}.yaml
+          tag: ghcr.io/${{ github.repository }}/${{ matrix.image }}:latest
+
   list-images:
     runs-on: ubuntu-latest
     outputs:
@@ -23,7 +68,8 @@ jobs:
       - name: list images
         id: output-images
         run: |
-          echo "images=$(ls images | jq -R -s -c 'split("\n")[:-1]')" >> $GITHUB_OUTPUT
+          echo "images=$(ls images | grep -v apko | jq -R -s -c 'split("\n")[:-1]')" >> $GITHUB_OUTPUT
+          
 
   build-images:
     runs-on: ubuntu-latest
