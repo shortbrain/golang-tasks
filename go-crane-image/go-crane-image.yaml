@@ -66,7 +66,7 @@ spec:
       description: URL of the image just built.
   steps:
     - name: build-go
-      image: ghcr.io/shortbrain/golang-tasks/go:1.21
+      image: ghcr.io/shortbrain/golang-tasks/go-1.21:latest
       workingDir: $(workspaces.source.path)
       script: |
         #!/usr/bin/env bash
@@ -83,7 +83,7 @@ spec:
         - name: CGO_ENABLED
           value: "$(params.go.CGO_ENABLED)"
     - name: publish-image
-      image: ghcr.io/shortbrain/golang-tasks/crane:0.17.0
+      image: ghcr.io/shortbrain/golang-tasks/crane:latest
       workingDir: $(workspaces.source.path)
       script: |
         #!/usr/bin/env bash
