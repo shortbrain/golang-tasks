@@ -49,11 +49,15 @@ spec:
         Golang options, such as flags, …
       type: object
       properties:
+        version:
+          type: string
+          enum: ["1.19", "1.20", "1.21", "1.22"]
         GOFLAGS: {type: string}
         GOOS: {type: string}
         GOARCH: {type: string}
         CGO_ENABLED: {type: string}
       default:
+        version: "1.21"
         GOFLAGS: "-v"
         GOOS: ""
         GOARCH: ""
